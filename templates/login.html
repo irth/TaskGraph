@@ -27,6 +27,9 @@
     <div class="form-input mt-12">
         <input type="submit" class="btn-wide mx-auto block" value="{% if register %}Register{% else %}Log in{% endif %}">
     </div>
+    <div class="form-input text-center">
+        <a href="{% if register %}{{ url_for('auth.login') }}{% else %}{{ url_for('auth.register') }}{% endif %}" class="link">{% if register %}Log in{% else %}Register{% endif %}
+    </div>
 </form>
 </div>
 </ul>

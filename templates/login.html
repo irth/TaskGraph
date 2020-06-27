@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% block title %}{% if not register %}Log in{% else %}Register{% endif %}{% endblock %}
+{% block body %}
+<form method="POST">
+    <input type="text" id="username" name="username" {% if username %}value="{{ username }}"{% endif %}>
+    <input type="password" id="password" name="password">
+    {% if register %}<input type="password" id="repeat" name="repeat">{% endif %}
+    {% if not register %}<input type="checkbox" id="remember" name="remember" value="1"><label for="remember">Remember me</label>{% endif %}
+    <input type="submit" value="{% if register %}Register{% else %}Log in{% endif %}">
+</form>
+{% if username_errors or password_errors %}
+<ul>
+    {% for error in username_errors + password_errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% if failed %}
+Invalid username or password.
+{% endif %}
+{% endblock %}

@@ -1,13 +1,20 @@
 {% extends "_base.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-Hello.<br>
 
 {% if current_user.is_authenticated %}
-    Hi {{ current_user.username }}! <a href="{{ url_for('auth.logout') }}">Log out</a>
+<p class="text-xl">
+Hi {{ current_user.username }}! <a href="{{ url_for('auth.logout') }}" class="underline text-blue-600">Log out.</a>
+<p>
 {% else %}
-    <a href="{{ url_for('auth.login') }}">Log in.</a><br>
-    <a href="{{ url_for('auth.register') }}">Register.</a>
+<p class="text-lg">Easily track your productivity with an activity graph based on your completed TODOs.</p>
+<p class="text-lg">Supports NextCloud or any other CalDAV compatible service.</p>
+
+<div class="mt-8 text-center text-xl">
+    <a href="{{ url_for('auth.register') }}" class="btn">Register</a>
+    or
+    <a href="{{ url_for('auth.login') }}" class="link">log in.</a><br>
+</div>
 {% endif %}
 
 {% endblock %}

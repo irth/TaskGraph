@@ -1,0 +1,24 @@
+{
+  "name": "taskgraph",
+  "version": "0.0.1",
+  "description": "",
+  "main": "n/a",
+  "dependencies": {
+    "tailwindcss": "^1.4.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tailwindcss build styles/main.css -o static/output.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/irth/TaskGraph.git"
+  },
+  "author": "irth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/irth/TaskGraph/issues"
+  },
+  "homepage": "https://github.com/irth/TaskGraph#readme"
+}

@@ -1,4 +1,6 @@
 /dev.sqlite
+/node_modules/
+/static/output.css
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

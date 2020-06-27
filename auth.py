@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from urllib.parse import urlparse, urljoin
+from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from flask_login import LoginManager, login_user, login_required, logout_user
 from sqlalchemy.exc import IntegrityError
 
@@ -8,6 +9,7 @@ blueprint = Blueprint('auth', __name__)
 
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"
+login_manager.login_message_category = "warning"
 
 
 def init_app(app):
@@ -39,17 +41,25 @@ def register():
 @login_required
 def logout():
     logout_user()
+    flash('Logged out.', 'success')
     return redirect(url_for('root'))
 
 
 def login_fail(username):
-    return render_template('login.html', failed=True, username=username)
+    flash(u'Incorrect username or password', 'error')
+    return render_template('login.html', username=username)
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+        ref_url.netloc == test_url.netloc
 
 
 def do_login():
     username = request.form['username']
     password = request.form['password']
-    remember = request.form.get('remember', '0') == "1"
 
     if len(username) == 0 or len(password) == 0:
         return login_fail(username)
@@ -60,8 +70,13 @@ def do_login():
     if not u.check_password(password):
         return login_fail(username)
 
-    login_user(u, remember=remember)
-    return redirect(url_for('root'))
+    login_user(u, remember=True)
+    flash(u'Logged in successfully.', 'success')
+    next = request.args.get('next')
+    if not is_safe_url(next):
+        return abort(400)
+
+    return redirect(next or url_for('index'))
 
 
 def do_register():
@@ -69,11 +84,11 @@ def do_register():
     password = request.form['password']
     repeat = request.form['repeat']
 
-    username_errors = User.validate_username(username)
-    password_errors = User.validate_password(password, repeat)
+    username_error = User.validate_username(username)
+    password_error = User.validate_password(password, repeat)
 
-    if len(username_errors) + len(password_errors) > 0:
-        return render_template('login.html', register=True, username_errors=username_errors, password_errors=password_errors, username=username)
+    if username_error is not None or password_error is not None:
+        return render_template('login.html', register=True, username_error=username_error, password_error=password_error, username=username)
 
     u = User(username=username)
     u.set_password(password)
@@ -82,4 +97,7 @@ def do_register():
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        return render_template('login.html', register=True, username_errors=['Username already taken.'], password_errors=password_errors)
+        return render_template('login.html', register=True, username_error='Username already taken.', password_error=password_error)
+    login_user(u, remember=True)
+    flash(u'Registered successfully.', 'success')
+    return redirect(url_for('root'))

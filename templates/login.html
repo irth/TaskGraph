@@ -1,21 +1,33 @@
 {% extends "_base.html" %}
 {% block title %}{% if not register %}Log in{% else %}Register{% endif %}{% endblock %}
 {% block body %}
+<div class="form-container mt-4">
 <form method="POST">
-    <input type="text" id="username" name="username" {% if username %}value="{{ username }}"{% endif %}>
-    <input type="password" id="password" name="password">
-    {% if register %}<input type="password" id="repeat" name="repeat">{% endif %}
-    {% if not register %}<input type="checkbox" id="remember" name="remember" value="1"><label for="remember">Remember me</label>{% endif %}
-    <input type="submit" value="{% if register %}Register{% else %}Log in{% endif %}">
+    <div class="form-input {% if username_error %}has-errors{% endif %}">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" {% if username %}value="{{ username }}"{% endif %}>
+        {% if username_error %}
+            <p class="error">{{ username_error }}</p>
+        {% endif %}
+    </div>
+
+    <div class="form-input {% if password_error %}has-errors{% endif %}">
+        <label for="Password">Password</label>
+        <input type="password" id="password" name="password">
+        {% if password_error %}
+            <p class="error">{{ password_error }}</p>
+        {% endif %}
+    </div>
+    {% if register %}
+    <div class="form-input {% if password_error %}has-errors{% endif %}">
+        <label for="repeat">Repeat password</label>
+        <input type="password" id="repeat" name="repeat">
+    </div>
+    {% endif %}
+    <div class="form-input mt-12">
+        <input type="submit" class="btn-wide mx-auto block" value="{% if register %}Register{% else %}Log in{% endif %}">
+    </div>
 </form>
-{% if username_errors or password_errors %}
-<ul>
-    {% for error in username_errors + password_errors %}
-    <li>{{ error }}</li>
-    {% endfor %}
+</div>
 </ul>
-{% endif %}
-{% if failed %}
-Invalid username or password.
-{% endif %}
 {% endblock %}

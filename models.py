@@ -27,24 +27,24 @@ class User(UserMixin, db.Model):
     @staticmethod
     def validate_username(username):
         if len(username) < 2:
-            return ['The username needs to be at least 2 characters long.']
+            return 'The username needs to be at least 2 characters long.'
 
         valid = string.ascii_letters + string.digits
         for ch in username:
             if ch not in valid:
-                return ['The username can only contain ASCII letters and numbers.']
+                return 'The username can only contain ASCII letters and numbers.'
 
-        return []
+        return None
 
     @staticmethod
     def validate_password(password, repeat):
         if len(password) < 10:
-            return ['The password needs to be at least 10 characters long.']
+            return 'The password needs to be at least 10 characters long.'
 
         if password != repeat:
-            return ['The passwords do not match.']
+            return 'The passwords do not match.'
 
-        return []
+        return None
 
 
 if __name__ == '__main__':

@@ -1,0 +1,100 @@
+@import "tailwindcss/base";
+  
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+
+/* links and buttons */
+.fast-transition {
+    @apply transition-all duration-100 ease-in-out;
+}
+
+.link {
+    @apply text-blue-600 fast-transition underline;
+}
+
+.link:hover {
+    @apply text-blue-400 fast-transition;
+}
+
+.link:focus {
+    @apply text-blue-800;
+}
+
+
+.btn {
+    @apply bg-blue-600 fast-transition rounded p-2 font-semibold text-white text-xl;
+}
+
+.btn-wide {
+    @apply btn px-4;
+}
+
+.btn:hover {
+    @apply bg-blue-400 fast-transition;
+}
+
+.btn:focus {
+    @apply bg-blue-800;
+}
+
+
+/* forms */
+.form-container {
+    @apply w-full max-w-sm mx-auto;
+}
+
+.form-input {
+    @apply mb-4;
+}
+
+form label {
+    @apply block text-gray-700 text-sm font-bold mb-2;
+}
+
+form input[type=text],
+form input[type=password] {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+}
+
+form input[type=text]:focus,
+form input[type=password]:focus {
+    @apply outline-none shadow-outline;
+} 
+
+.form-input.has-errors input {
+    @apply border-red-500;
+}
+
+.form-input.has-errors p.error {
+    @apply text-red-500 text-sm mt-1;
+}
+
+
+/* flashes */
+
+ul.flashes {
+    @apply mb-4;
+}
+
+ul.flashes li {
+    @apply rounded p-2 px-4 mb-2;
+}
+
+ul.flashes li span.close {
+    @apply float-right cursor-pointer;
+}
+
+
+ul.flashes li.success {
+    @apply bg-green-200;
+}
+
+ul.flashes li.warning {
+    @apply bg-orange-200;
+}
+
+ul.flashes li.error {
+    @apply bg-red-200;
+}

@@ -76,7 +76,7 @@ def do_login():
     if not is_safe_url(next):
         return abort(400)
 
-    return redirect(next or url_for('index'))
+    return redirect(next or url_for('root'))
 
 
 def do_register():

@@ -10,15 +10,16 @@
 
 <body>
     <div id="page" class="container mx-auto px-4 max-w-3xl">
-        <h1 class="text-4xl font-semibold text-center p-4"><a href="{{ url_for('root') }}">TaskGraph<a></h1>
+        <h1 class="text-4xl font-semibold text-center p-4"><a href="{{ url_for('root') }}"
+                class="text-black hover:text-black focus:text-black">TaskGraph</a></h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="flashes">
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }} <span class="close">&times;</span></li>
-                {% endfor %}
-                </ul>
-            {% endif %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }} <span class="close">&times;</span></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% endwith %}
 
         {% block body %}
@@ -26,10 +27,10 @@
     </div>
     <script>
         [].forEach.call(
-            document.querySelectorAll("ul.flashes span.close"), 
-            (flash) => {flash.onclick = () => flash.parentNode.remove()}
+            document.querySelectorAll("ul.flashes span.close"),
+            (flash) => { flash.onclick = () => flash.parentNode.remove() }
         )
-     </script>
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,35 @@
+{% extends "_base.html" %}
+{% block title %}Add task list source{% endblock %}
+{% block body %}
+<div class="form-container mt-4">
+    <form method="POST">
+        <div class="form-input {% if username_error %}has-errors{% endif %}">
+            <label for="caldav">CalDAV url</label>
+            <input type="text" id="caldav" name="caldav" {% if caldav %}value="{{ caldav }}" {% endif %}>
+            {% if caldav_error %}
+            <p class="error">{{ caldav_error }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-input {% if username_error %}has-errors{% endif %}">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" {% if username %}value="{{ username }}" {% endif %}>
+            {% if username_error %}
+            <p class="error">{{ username_error }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-input {% if password_error %}has-errors{% endif %}">
+            <label for="Password">Password</label>
+            <input type="password" id="caldav_password" name="caldav_password">
+            {% if password_error %}
+            <p class="error">{{ password_error }}</p>
+            {% endif %}
+        </div>
+        <div class="form-input mt-12">
+            <input type="submit" class="btn-wide mx-auto block" value="Add tasklist">
+        </div>
+    </form>
+</div>
+</ul>
+{% endblock %}

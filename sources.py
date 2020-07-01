@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, flash
+from flask_login import login_required, current_user
 
 import caldav
+
+from models import TasklistSource, db
 
 blueprint = Blueprint('sources', __name__)
 
@@ -27,6 +30,7 @@ class CalDAVSource:
 
 
 @blueprint.route("/add", methods=["GET", "POST"])
+@login_required
 def add():
     if request.method == 'GET':
         return render_template('add.html')
@@ -38,7 +42,15 @@ def add():
         src = CalDAVSource(url, username, password)
         error = src.validate()
         if error is None:
-            return "OK"  # TODO: add to db
+            src_model = TasklistSource(
+                user=current_user,
+                source="caldav",
+                url=url, username=username, password=password)
+            db.session.add(src_model)
+            db.session.commit()
+            # TODO: do we need to catch exceptions and do rollbacks?
+            return "OK"
+
         else:
             flash(error, "error")
             return render_template('add.html', caldav=url, username=username)

@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String, unique=False, nullable=False)
+    sources = db.relationship('TasklistSource', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password, rounds=12)
@@ -47,8 +48,16 @@ class User(UserMixin, db.Model):
         return None
 
 
-if __name__ == '__main__':
-    print("Creating db...")
-    from main import app
-    with app.app_context():
-        db.create_all()
+class TasklistSource(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    source = db.Column(db.String)  # source type, only caldav for now
+
+    url = db.Column(db.String)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+
+    # for any additional data, handled by the source implementation
+    other = db.Column(db.String)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

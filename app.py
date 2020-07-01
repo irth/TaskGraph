@@ -1,6 +1,7 @@
 import string
 
 from flask import Flask, render_template, request, flash
+from flask_migrate import Migrate
 
 import models
 import auth
@@ -15,6 +16,9 @@ app.register_blueprint(sources.blueprint)
 
 models.init_app(app)
 auth.init_app(app)
+
+# maybe move to models?
+migrate = Migrate(app, models.db)
 
 
 @app.route('/')

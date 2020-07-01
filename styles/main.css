@@ -31,11 +31,11 @@ a:focus, .link:focus {
     @apply btn px-4;
 }
 
-.btn:hover {
+.btn:hover, .btn-wide:hover {
     @apply bg-blue-400 fast-transition;
 }
 
-.btn:focus {
+.btn:focus, .btn-wide:focus {
     @apply bg-blue-800;
 }
 

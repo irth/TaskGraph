@@ -17,8 +17,16 @@
 
 <div>
   <h3 class="text-2xl font-semibold">Tasklists</h3>
+  {% if current_user.sources %}
+  {% for source in current_user.sources %}
+  <h4 class="text-xl">{{source.name}}</h4>
+  <!-- TODO: show tasklists -->
+  <!-- TODO: allow editing sources -->
+  {% endfor %}
+  {% else %}
   <p>You do not have any task lists configured yet.</p>
   <p><a href="{{ url_for('sources.add') }}">Add one.</a></p>
+  {% endif %}
 </div>
 {% else %}
 <p class="text-lg">

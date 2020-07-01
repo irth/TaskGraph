@@ -52,6 +52,7 @@ class TasklistSource(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     source = db.Column(db.String)  # source type, only caldav for now
+    name = db.Column(db.String)  # a human-readable name, chosen by the user
 
     url = db.Column(db.String)
     username = db.Column(db.String)

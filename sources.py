@@ -36,21 +36,33 @@ def add():
         return render_template('add.html')
     else:
         # TODO: forbid from calling local adresses somehow
+        name = request.form["name"]
+
         url = request.form["caldav"]
         username = request.form.get("username", "")
         password = request.form.get("caldav_password", "")
+
+        if len(name) == 0:
+            return render_template('add.html', caldav=url, username=username, name=name, name_error="Name cannot be empty.")
+
+        if len(url) == 0:
+            return render_template('add.html', caldav=url, username=username, name=name, caldav_error="URL cannot be empty.")
+
         src = CalDAVSource(url, username, password)
         error = src.validate()
         if error is None:
             src_model = TasklistSource(
+                name=name,
                 user=current_user,
                 source="caldav",
                 url=url, username=username, password=password)
             db.session.add(src_model)
             db.session.commit()
             # TODO: do we need to catch exceptions and do rollbacks?
+
+            # TODO: fetch tasklists
             return "OK"
 
         else:
             flash(error, "error")
-            return render_template('add.html', caldav=url, username=username)
+            return render_template('add.html', caldav=url, username=username, name=name)

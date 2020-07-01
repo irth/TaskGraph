@@ -3,7 +3,14 @@
 {% block body %}
 <div class="form-container mt-4">
     <form method="POST">
-        <div class="form-input {% if username_error %}has-errors{% endif %}">
+        <div class="form-input {% if name_error %}has-errors{% endif %}">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" {% if name %}value="{{ name }}" {% endif %}>
+            {% if name_error %}
+            <p class="error">{{ name_error }}</p>
+            {% endif %}
+        </div>
+        <div class="form-input {% if caldav_error %}has-errors{% endif %}">
             <label for="caldav">CalDAV url</label>
             <input type="text" id="caldav" name="caldav" {% if caldav %}value="{{ caldav }}" {% endif %}>
             {% if caldav_error %}

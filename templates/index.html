@@ -9,10 +9,14 @@
 </p>
 
 <div class="w-full h-40 bg-gray-200 flex items-center justify-center mb-8">
+  {% if not current_user.sources %}
   <p>
     Your activity graph will show up here once you
     <a href="{{ url_for('sources.add') }}">add a task list source.</a>
   </p>
+  {% else %}
+  <!-- TODO: ask user to enable some task lists if none selected -->
+  {% endif %}
 </div>
 
 <div>

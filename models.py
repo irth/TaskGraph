@@ -62,3 +62,15 @@ class TasklistSource(db.Model):
     other = db.Column(db.String)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    tasklists = db.relationship("Tasklist", backref="source", lazy=True)
+
+
+class Tasklist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String)
+    remote_id = db.Column(db.String)  # for caldav, this is the url
+
+    source_id = db.Column(db.Integer, db.ForeignKey(
+        'tasklist_source.id'), nullable=False)

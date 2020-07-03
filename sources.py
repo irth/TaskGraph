@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 import caldav
 
-from models import TasklistSource, db
+from models import TasklistSource, Tasklist, db
 
 blueprint = Blueprint('sources', __name__)
 
@@ -15,18 +15,27 @@ class CalDAVSource:
         self.client = caldav.DAVClient(
             url, username=username, password=password)
 
-    def validate(self):
+    def tasklists(self):
+        # TODO: firure out how to update the tasklists list periodically
+        tasklists = []
         try:
             # TODO: invalid passwords could cause long delays
             # In case of an invalid password this could take a long time.
             # Investigate into timeouts and maybe later mark as invalid whenever
             # a request fails, to avoid making any further requests until the
             # user updates the auth information.
-            self.client.principal()
+            principal = self.client.principal()
+            for calendar in principal.calendars():
+                tasklist = Tasklist(name=calendar.name,
+                                    remote_id=str(calendar.url))
+                tasklists.append(tasklist)
+                # TODO: count todos? or maybe this should be separate, as a cron job
         except caldav.lib.error.AuthorizationError:
-            return "Invalid username or password."
+            # TODO: mark as problematic
+            return [], "Invalid username or password."
         except:
-            return "Unknown error, make sure the url/username/password are correct or try again later."
+            return [], "Unknown error, make sure the url/username/password are correct or try again later."
+        return tasklists, None
 
 
 @blueprint.route("/add", methods=["GET", "POST"])
@@ -49,20 +58,22 @@ def add():
             return render_template('add.html', caldav=url, username=username, name=name, caldav_error="URL cannot be empty.")
 
         src = CalDAVSource(url, username, password)
-        error = src.validate()
-        if error is None:
-            src_model = TasklistSource(
-                name=name,
-                user=current_user,
-                source="caldav",
-                url=url, username=username, password=password)
-            db.session.add(src_model)
-            db.session.commit()
-            # TODO: do we need to catch exceptions and do rollbacks?
-
-            # TODO: fetch tasklists
-            return "OK"
-
-        else:
+        tasklists, error = src.tasklists()
+        if error is not None:
             flash(error, "error")
             return render_template('add.html', caldav=url, username=username, name=name)
+
+        src_model = TasklistSource(
+            name=name,
+            user=current_user,
+            source="caldav",
+            url=url, username=username, password=password)
+
+        for tasklist in tasklists:
+            tasklist.source = src_model
+
+        db.session.add_all([src_model, *tasklists])
+        db.session.commit()
+        # TODO: do we need to catch exceptions and do rollbacks?
+
+        return "OK"

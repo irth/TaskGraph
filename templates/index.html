@@ -24,7 +24,16 @@
   {% if current_user.sources %}
   {% for source in current_user.sources %}
   <h4 class="text-xl">{{source.name}}</h4>
-  <!-- TODO: show tasklists -->
+  {% for tasklist in source.tasklists %}
+  <div>
+    <label for="tasklist_{{tasklist.id}}">
+      <input type="checkbox" id="tasklist_{{tasklist.id}}" name="tasklists" value="{{tasklist.id}}">
+      {{ tasklist.name }}
+    </label>
+  </div>
+  {% else %}
+  This source does not provide any tasklists.
+  {% endfor %}
   <!-- TODO: allow editing sources -->
   {% endfor %}
   {% else %}

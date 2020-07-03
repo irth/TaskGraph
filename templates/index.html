@@ -23,18 +23,24 @@
   <h3 class="text-2xl font-semibold">Tasklists</h3>
   {% if current_user.sources %}
   {% for source in current_user.sources %}
-  <h4 class="text-xl">{{source.name}}</h4>
-  {% for tasklist in source.tasklists %}
-  <div>
-    <label for="tasklist_{{tasklist.id}}">
-      <input type="checkbox" id="tasklist_{{tasklist.id}}" name="tasklists" value="{{tasklist.id}}">
-      {{ tasklist.name }}
-    </label>
+  <div class="mt-4">
+    <h4 class="text-xl">{{source.name}}</h4>
+    <div>
+      <a href="/source/{{ source.id }}/edit">edit</a> &middot; <a href="/source/{{ source.id }}/update">update</a>
+      &middot; <a href="/source/{{ source.id }}/delete"
+        class="text-red-600 hover:text-red-400 focus:text-red-800">delete</a>
+    </div>
+    {% for tasklist in source.tasklists %}
+    <div>
+      <label for="tasklist_{{tasklist.id}}">
+        <input type="checkbox" id="tasklist_{{tasklist.id}}" name="tasklists" value="{{tasklist.id}}">
+        {{ tasklist.name }}
+      </label>
+    </div>
+    {% else %}
+    This source does not provide any tasklists.
+    {% endfor %}
   </div>
-  {% else %}
-  This source does not provide any tasklists.
-  {% endfor %}
-  <!-- TODO: allow editing sources -->
   {% endfor %}
   {% else %}
   <p>You do not have any task lists configured yet.</p>

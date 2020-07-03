@@ -1,9 +1,4 @@
 @import "tailwindcss/base";
-  
-@import "tailwindcss/components";
-
-@import "tailwindcss/utilities";
-
 
 /* links and buttons */
 .fast-transition {
@@ -98,3 +93,8 @@ ul.flashes li.warning {
 ul.flashes li.error {
     @apply bg-red-200;
 }
+
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";

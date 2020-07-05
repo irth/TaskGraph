@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, abort
 from flask_login import login_required, current_user
 
 import caldav
@@ -76,4 +76,19 @@ def add():
         db.session.commit()
         # TODO: do we need to catch exceptions and do rollbacks?
 
-        return "OK"
+        return "OK"  # TODO: redirect somewhere
+
+
+@blueprint.route("/source/<id>/edit", methods=["GET", "POST"])
+@login_required
+def edit(id=None):
+    if request.method == "GET":
+        if id is None:
+            return abort(404)
+        source = TasklistSource.query.get(id)
+        if source.user_id != current_user.id:
+            return abort(403)
+        return render_template('add.html', edit=True, name=source.name,
+                               caldav=source.url, username=source.username)
+    else:
+        raise NotImplementedError()

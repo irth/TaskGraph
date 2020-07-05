@@ -26,7 +26,8 @@
   <div class="mt-4">
     <h4 class="text-xl">{{source.name}}</h4>
     <div>
-      <a href="/source/{{ source.id }}/edit">edit</a> &middot; <a href="/source/{{ source.id }}/update">update</a>
+      <a href="{{ url_for('sources.edit', id=source.id) }}">edit</a> &middot; <a
+        href="/source/{{ source.id }}/update">update</a>
       &middot; <a href="/source/{{ source.id }}/delete"
         class="text-red-600 hover:text-red-400 focus:text-red-800">delete</a>
     </div>

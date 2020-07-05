@@ -34,7 +34,12 @@
             {% endif %}
         </div>
         <div class="form-input mt-12">
-            <input type="submit" class="btn-wide mx-auto block" value="Add tasklist">
+            <input type="submit" class="btn-wide mx-auto block"
+                value="{% if edit %}Save{% else %}Add{% endif %} tasklist">
+        </div>
+        <div class="form-input mt-4 text-center">
+            <!-- TODO: implement delete route and replace with url_for -->
+            <a href="delete" class="text-red-600 hover:text-red-400 focus:text-red-800">delete</a>
         </div>
     </form>
 </div>
